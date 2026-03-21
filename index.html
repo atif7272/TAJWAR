@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+<title>Eid Mubarak — For Minahil Tajwar, From Ati</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --sapphire: #0f2b3d;
+    --sapphire-bright: #1e4a6b;
+    --teal-glow: #2c8c8c;
+    --amber: #e0a458;
+    --amber-soft: #f7d48b;
+    --ivory-light: #fff7ed;
+    --dusty-rose: #bc7a6e;
+    --mauve: #a55c6e;
+    --night-deep: #09161f;
+    --night-card: #0e1c28;
+    --text-grace: #f2e8cf;
+    --border-grace: rgba(224, 164, 88, 0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: radial-gradient(circle at 10% 30%, #0b1b26, #030c14);
+    color: var(--text-grace);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* canvas background (stars, moons) */
+  #starCanvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* glowing orbs */
+  .bg-glow {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(130px);
+    opacity: 0.2;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .bg-glow.teal {
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, #2c8c8c, transparent 75%);
+    top: -300px; right: -200px;
+    animation: slowDrift 20s ease-in-out infinite alternate;
+  }
+  .bg-glow.amber {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, #e0a458, transparent 70%);
+    bottom: -200px; left: -150px;
+    animation: slowDrift 24s infinite alternate-reverse;
+  }
+  .bg-glow.rose-dust {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, #bc7a6e, transparent 70%);
+    top: 50%; left: 70%;
+    transform: translate(-50%, -50%);
+    animation: slowDrift 18s infinite alternate;
+  }
+  @keyframes slowDrift {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(40px, 30px) scale(1.07); }
+  }
+
+  .geo-pattern {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.04;
+    background-image: repeating-linear-gradient(45deg, #e0a458 0px, #e0a458 1px, transparent 1px, transparent 55px),
+                      repeating-linear-gradient(-45deg, #2c8c8c 0px, #2c8c8c 1px, transparent 1px, transparent 60px);
+  }
+
+  .page {
+    position: relative;
+    z-index: 2;
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 50px 24px 90px;
+  }
+
+  /* top silk border */
+  .silk-border {
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--amber), var(--teal-glow), var(--dusty-rose), transparent);
+    border-radius: 4px;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 1.1s ease forwards 0.2s;
+  }
+
+  /* moon & stars emblem */
+  .moon-emblems {
+    text-align: center;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeDown 1.3s ease forwards 0.5s;
+  }
+  .moon-emblems svg {
+    filter: drop-shadow(0 0 14px var(--amber));
+    transition: transform 0.3s;
+    animation: gentleSway 5s ease-in-out infinite;
+  }
+  @keyframes gentleSway {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-8px) rotate(2deg); }
+  }
+
+  /* arabic basmala */
+  .basmala {
+    font-family: 'Amiri', serif;
+    font-size: clamp(2rem, 5vw, 3.3rem);
+    color: var(--amber-soft);
+    text-align: center;
+    text-shadow: 0 0 15px rgba(224, 164, 88, 0.5);
+    opacity: 0;
+    animation: fadeUp 1.2s forwards 0.7s;
+    letter-spacing: 0.02em;
+  }
+
+  .eid-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(2rem, 7vw, 4.5rem);
+    font-weight: 700;
+    text-align: center;
+    background: linear-gradient(125deg, #f7d48b, #e0a458, #2c8c8c, #e0a458);
+    background-size: 240% 240%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmerEid 6s ease infinite, fadeUp 1.2s forwards 0.9s;
+    opacity: 0;
+    margin: 12px 0 6px;
+  }
+  @keyframes shimmerEid {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  .urdu-sub {
+    font-family: 'Amiri', serif;
+    font-size: clamp(1rem, 3vw, 1.5rem);
+    text-align: center;
+    color: var(--amber);
+    font-style: italic;
+    opacity: 0;
+    animation: fadeUp 1.2s forwards 1.1s;
+  }
+
+  .ornament-divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 38px auto;
+    max-width: 480px;
+    opacity: 0;
+    animation: fadeUp 1s forwards 1.3s;
+  }
+  .ornament-divider .line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--amber), var(--teal-glow), transparent);
+  }
+  .ornament-divider .star-icon {
+    color: var(--amber);
+    font-size: 1.2rem;
+    animation: spinSlow 10s linear infinite;
+  }
+  @keyframes spinSlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* names banner — sibling connection */
+  .sibling-banner {
+    text-align: center;
+    margin: 8px 0 45px;
+    opacity: 0;
+    animation: fadeUp 1.4s forwards 1.5s;
+  }
+  .relation-tag {
+    font-size: 0.9rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--teal-glow);
+    font-weight: 400;
+    font-family: 'Inter', sans-serif;
+    background: rgba(44, 140, 140, 0.15);
+    display: inline-block;
+    padding: 4px 16px;
+    border-radius: 40px;
+    backdrop-filter: blur(4px);
+  }
+  .sister-name {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(2.3rem, 6vw, 4.2rem);
+    font-weight: 700;
+    color: var(--ivory-light);
+    text-shadow: 0 0 20px rgba(224, 164, 88, 0.5);
+    margin-top: 10px;
+  }
+  .brother-heart {
+    color: var(--dusty-rose);
+    font-size: 1.5rem;
+    margin: 12px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-family: monospace;
+  }
+  .brother-heart span {
+    font-size: 1.8rem;
+    animation: softPulse 2s infinite;
+  }
+  @keyframes softPulse {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.15); text-shadow: 0 0 12px #bc7a6e; }
+  }
+  .ati-name {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(1.4rem, 4vw, 2.4rem);
+    color: var(--amber-soft);
+    letter-spacing: 2px;
+  }
+
+  /* card style */
+  .card {
+    background: linear-gradient(125deg, rgba(14, 28, 40, 0.85), rgba(6, 18, 26, 0.92));
+    border: 1px solid rgba(224, 164, 88, 0.25);
+    border-radius: 28px;
+    padding: 44px 48px;
+    margin: 42px 0;
+    position: relative;
+    backdrop-filter: blur(10px);
+    transition: all 0.2s;
+    opacity: 0;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 28px;
+    background: radial-gradient(ellipse at 20% 30%, rgba(44, 140, 140, 0.05), transparent 70%);
+    pointer-events: none;
+  }
+  .card-corner {
+    position: absolute;
+    width: 32px; height: 32px;
+    border-color: var(--amber);
+    border-style: solid;
+    opacity: 0.45;
+  }
+  .card-corner.tl { top: 14px; left: 14px; border-width: 1px 0 0 1px; }
+  .card-corner.tr { top: 14px; right: 14px; border-width: 1px 1px 0 0; }
+  .card-corner.bl { bottom: 14px; left: 14px; border-width: 0 0 1px 1px; }
+  .card-corner.br { bottom: 14px; right: 14px; border-width: 0 1px 1px 0; }
+
+  .card.anim-1 { animation: fadeUp 1.4s forwards 1.9s; }
+  .card.anim-2 { animation: fadeUp 1.4s forwards 2.3s; }
+  .card.anim-3 { animation: fadeUp 1.4s forwards 2.7s; }
+  .card.anim-4 { animation: fadeUp 1.4s forwards 3.1s; }
+
+  .card-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(0.8rem, 2vw, 1rem);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--teal-glow);
+    margin-bottom: 26px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--teal-glow), transparent);
+  }
+
+  .card p {
+    font-size: clamp(1rem, 2.4vw, 1.22rem);
+    line-height: 1.85;
+    font-weight: 350;
+    color: #f2e8cf;
+  }
+  .card p + p { margin-top: 18px; }
+  .card p em {
+    color: var(--amber-soft);
+    font-style: italic;
+  }
+  .highlight-kind {
+    background: linear-gradient(120deg, rgba(224,164,88,0.15), transparent);
+    padding: 0 4px;
+    font-weight: 500;
+    color: #ffeaaf;
+  }
+
+  /* dua special */
+  .dua-grid {
+    margin-top: 8px;
+  }
+  .dua-item {
+    margin: 28px 0;
+    padding-left: 22px;
+    border-left: 2px solid var(--amber);
+  }
+  .dua-arabic {
+    font-family: 'Amiri', serif;
+    font-size: clamp(1.2rem, 3.2vw, 1.8rem);
+    color: var(--amber-soft);
+    text-align: right;
+    line-height: 1.7;
+    direction: rtl;
+    margin-bottom: 6px;
+  }
+  .dua-english {
+    font-size: 0.98rem;
+    color: #cbd5e0;
+    font-style: italic;
+    font-weight: 350;
+  }
+
+  /* floating kind words band */
+  .kindness-band {
+    overflow: hidden;
+    white-space: nowrap;
+    margin: 18px 0 28px;
+    opacity: 0;
+    animation: fadeUp 1s forwards 3.3s;
+  }
+  .kindness-scroll {
+    display: inline-block;
+    animation: scrollKind 32s linear infinite;
+    font-family: 'Amiri', serif;
+    font-size: clamp(1rem, 2.8vw, 1.4rem);
+    color: var(--amber);
+    letter-spacing: 1px;
+    opacity: 0.7;
+  }
+  .kindness-scroll span {
+    margin: 0 45px;
+    color: var(--teal-glow);
+  }
+  @keyframes scrollKind {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* closing signature */
+  .closing-sister {
+    text-align: center;
+    margin-top: 56px;
+    opacity: 0;
+    animation: fadeUp 1.3s forwards 3.5s;
+  }
+  .closing-arabic-dua {
+    font-family: 'Amiri', serif;
+    font-size: clamp(1.5rem, 4.5vw, 2.5rem);
+    color: var(--amber-soft);
+    direction: rtl;
+    line-height: 1.7;
+  }
+  .closing-trans {
+    font-size: 1rem;
+    color: #bbcfdd;
+    margin-top: 8px;
+  }
+  .signature-block {
+    margin-top: 32px;
+    border-top: 1px dashed rgba(224, 164, 88, 0.4);
+    display: inline-block;
+    padding: 20px 30px;
+  }
+  .signature-block p {
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--teal-glow);
+  }
+  .sign-name {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.7rem;
+    color: var(--amber);
+    margin-top: 8px;
+  }
+
+  .bottom-grace {
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--dusty-rose), var(--amber), var(--teal-glow), transparent);
+    margin-top: 70px;
+    opacity: 0;
+    animation: fadeUp 1s forwards 3.8s;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    .card { padding: 32px 24px; }
+    .page { padding: 30px 16px 60px; }
+  }
+
+  /* sparkle */
+  .sparkle {
+    position: fixed;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: #f7d48b;
+    pointer-events: none;
+    z-index: 1;
+    animation: twinkle 3s ease-in-out infinite;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; transform: scale(0.2); }
+    50% { opacity: 0.9; transform: scale(1); }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="starCanvas"></canvas>
+<div class="bg-glow teal"></div>
+<div class="bg-glow amber"></div>
+<div class="bg-glow rose-dust"></div>
+<div class="geo-pattern"></div>
+
+<div class="page">
+
+  <div class="silk-border"></div>
+
+  <!-- Moon emblem with small stars -->
+  <div class="moon-emblems">
+    <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M60 20 C42 22, 28 36, 28 52 C28 68, 42 82, 60 84 C46 80, 36 68, 36 54 C36 40, 44 26, 60 20 Z" stroke="#e0a458" stroke-width="1.8" fill="rgba(224,164,88,0.12)"/>
+      <circle cx="70" cy="30" r="2.5" fill="#f7d48b" opacity="0.9"/>
+      <circle cx="82" cy="48" r="2" fill="#e0a458" opacity="0.8"/>
+      <circle cx="65" cy="78" r="2.2" fill="#f7d48b" opacity="0.7"/>
+      <path d="M78 18 L80 12 L82 18 L88 18 L83.5 22 L85 28 L80 23.5 L75 28 L76.5 22 L72 18 Z" fill="#e0a458" opacity="0.9"/>
+    </svg>
+  </div>
+
+  <p class="basmala">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+  <h1 class="eid-title">Eid ul Fitr Mubarak</h1>
+  <p class="urdu-sub">عید مبارک — چاند رات کی خوشیاں</p>
+
+  <div class="ornament-divider">
+    <div class="line"></div>
+    <span class="star-icon">✧</span>
+    <div class="line"></div>
+    <span class="star-icon">✧</span>
+    <div class="line"></div>
+  </div>
+
+  <!-- Sister-Brother Banner: special bond -->
+  <div class="sibling-banner">
+    <div class="relation-tag">✦  MY DEAR SISTER, MY STRENGTH  ✦</div>
+    <div class="sister-name">Minahil Tajwar</div>
+    <div class="brother-heart">
+      <span>🌙</span>  from your brother,  <span>🤍</span>
+    </div>
+    <div class="ati-name">Ati (Ali Atif)</div>
+    <div style="font-size: 0.85rem; margin-top: 12px; color: #c0cfdd;">"You treat me like family, and I cherish you like blood."</div>
+  </div>
+
+  <!-- scrolling urdu + kindness messages -->
+  <div class="kindness-band">
+    <div class="kindness-scroll">
+      🌸 شكراً لكل kindness 🌸 <span>✦</span> You are a light <span>✦</span> بہن جی، آپ بہت پیاری ہیں <span>✦</span>  Thank you for every support  <span>✦</span>  ✨ You always uplift me ✨ <span>✦</span>  شكراً لكل kindness 🌸 <span>✦</span> You are a light <span>✦</span> بہن جی، آپ بہت پیاری ہیں
+    </div>
+  </div>
+
+  <!-- Card 1: Gratitude & her kindness -->
+  <div class="card anim-1">
+    <div class="card-corner tl"></div>
+    <div class="card-corner tr"></div>
+    <div class="card-corner bl"></div>
+    <div class="card-corner br"></div>
+    <div class="card-title">✦  FOR THE SISTER OF MY HEART</div>
+    <p>
+      Minahil — Eid Mubarak! As the crescent of Shawwal rises, my first thought is to thank Allah for having you in my life. You’re not just a friend; you are the sister I never knew I needed. From the very first day, you treated me like your own brother — with kindness that felt like home.
+    </p>
+    <p>
+      Whether it was calming my anxious thoughts, staying up to help me study, or simply listening with your gentle heart — you’ve been my anchor. The way you say “Ati” with such warmth makes even hard days softer. Today, on Eid, I want to honour that kindness.
+    </p>
+    <p><em>You help me emotionally, academically, and you never let me feel alone. How could I ever put that into words?</em></p>
+  </div>
+
+  <!-- Card 2: Emotional & study support, gratitude -->
+  <div class="card anim-2">
+    <div class="card-corner tl"></div>
+    <div class="card-corner tr"></div>
+    <div class="card-corner bl"></div>
+    <div class="card-corner br"></div>
+    <div class="card-title">✦  FOR EVERY LATE NIGHT & GUIDING WORD</div>
+    <p>
+      There were moments when I felt lost — in studies, in emotions, in life. And every time, you were there, Minahil. You’d check on me, share your notes, give me the most sincere advice, and remind me that I’m capable. You never judged, never made me feel small. Instead, you lifted me.
+    </p>
+    <p>
+      You call me <span class="highlight-kind">“Ati”</span> — and that name on your lips feels like a blessing. I still remember how you patiently explained concepts I couldn't grasp, or sent me duas when I was stressed. Your politeness and grace are unmatched. Allah has truly gifted me a sister in you.
+    </p>
+    <p>May this Eid be a reward for every selfless act you’ve done. You deserve all the happiness, success, and peace that this world can offer — and more.</p>
+  </div>
+
+  <!-- Card 3: Duas & prayers for Minahil -->
+  <div class="card anim-3">
+    <div class="card-corner tl"></div>
+    <div class="card-corner tr"></div>
+    <div class="card-corner bl"></div>
+    <div class="card-corner br"></div>
+    <div class="card-title">✦  MY PRAYERS FOR YOU — MY SISTER</div>
+    <div class="dua-grid">
+      <div class="dua-item">
+        <div class="dua-arabic">اللَّهُمَّ بَارِكْ لِمِينَاہِلَ فِي عِلْمِهَا وَعَمَلِهَا</div>
+        <div class="dua-english">O Allah, bless Minahil in her knowledge and her deeds — make her studies a source of barakah and grant her excellence in every exam.</div>
+      </div>
+      <div class="dua-item">
+        <div class="dua-arabic">اللَّهُمَّ احْفَظْهَا كَمَا تَحْفَظُ الصَّالِحَاتِ</div>
+        <div class="dua-english">O Allah, protect her as You protect the righteous. Surround her with peace, keep her heart content, and reward her kindness manifold.</div>
+      </div>
+      <div class="dua-item">
+        <div class="dua-arabic">اللَّهُمَّ ارْزُقْهَا سَعَادَةً دَائِمَةً وَرِزْقًا حَلَالًا</div>
+        <div class="dua-english">O Allah, grant her everlasting happiness, pure provision, and a life filled with beautiful moments. Let her always be surrounded by those who cherish her.</div>
+      </div>
+      <div class="dua-item">
+        <div class="dua-arabic">جَزَاكِ اللَّهُ خَيْرًا كَثِيرًا يَا أُخْتِي</div>
+        <div class="dua-english">May Allah reward you with abundant goodness, my sister. Thank you for every time you held my hand, guided me, and treated me like family.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 4: Special brotherly message & bond -->
+  <div class="card anim-4">
+    <div class="card-corner tl"></div>
+    <div class="card-corner tr"></div>
+    <div class="card-corner bl"></div>
+    <div class="card-corner br"></div>
+    <div class="card-title">✦  A BROTHER'S GRATITUDE</div>
+    <p>
+      Minahil, you've shown me what it means to have a sister. You never hesitated to help me — whether I was struggling with studies or needed emotional support. Your politeness, your patient way of explaining things, your kindness without expectation — it’s rare, and it’s precious.
+    </p>
+    <p>
+      You call me “Ati” like a real sister would, and that melts my heart. In a world where many keep to themselves, you chose to be my support system. I pray that Allah grants you the highest ranks in this life and the next, that your dreams unfold like the petals of a rose, and that every time you need someone, you find love and care.
+    </p>
+    <p><em>Eid Mubarak, dear sister. Thank you for being my strength, my teacher, and my family. May our bond always grow in goodness, and may Allah accept all your duas.</em></p>
+    <p style="text-align: right; margin-top: 28px; color: var(--amber-soft);">— With eternal gratitude, your brother, Ati</p>
+  </div>
+
+  <!-- Final closing -->
+  <div class="closing-sister">
+    <div class="ornament-divider" style="margin-bottom: 24px;">
+      <div class="line"></div>
+      <span class="star-icon">🌙</span>
+      <div class="line"></div>
+    </div>
+    <div class="closing-arabic-dua">وَكُلُّ عَامٍ وَأَنْتِ بِخَيْرٍ يَا مِينَاهِل</div>
+    <div class="closing-trans">“May every year find you in goodness, Minahil — my sister by soul.”</div>
+    <div class="signature-block">
+      <p>Forever grateful, your brother</p>
+      <div class="sign-name">Ali Atif (Ati)</div>
+    </div>
+  </div>
+  <div class="bottom-grace"></div>
+</div>
+
+<script>
+  // Starry & crescent canvas enhanced
+  const canvas = document.getElementById('starCanvas');
+  const ctx2 = canvas.getContext('2d');
+  let width, height, starsList = [], crescentShapes = [], shootingStarsList = [];
+
+  function resizeCanvas() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  }
+
+  function initStarsBg() {
+    starsList = [];
+    const starCount = Math.min(300, Math.floor(width * height / 5800));
+    for (let i = 0; i < starCount; i++) {
+      starsList.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: 0.5 + Math.random() * 1.8,
+        alphaBase: 0.3 + Math.random() * 0.6,
+        speed: 0.5 + Math.random() * 1,
+        phase: Math.random() * Math.PI * 2,
+        color: `hsl(${45 + Math.random() * 20}, 70%, 65%)`
+      });
+    }
+  }
+
+  function initCrescentsBg() {
+    crescentShapes = [];
+    for (let i = 0; i < 5; i++) {
+      crescentShapes.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        size: 14 + Math.random() * 25,
+        alpha: 0.04 + Math.random() * 0.1,
+        dx: (Math.random() - 0.5) * 0.2,
+        dy: (Math.random() - 0.5) * 0.15
+      });
+    }
+  }
+
+  function drawCrescentMoon(x, y, sz, alpha) {
+    ctx2.save();
+    ctx2.globalAlpha = alpha;
+    ctx2.beginPath();
+    ctx2.arc(x, y, sz, 0, Math.PI * 2);
+    ctx2.arc(x + sz * 0.4, y - sz * 0.12, sz * 0.78, Math.PI * 2, 0, true);
+    ctx2.fillStyle = 'rgba(224,164,88,0.07)';
+    ctx2.fill();
+    ctx2.strokeStyle = '#e0a458';
+    ctx2.lineWidth = 0.8;
+    ctx2.stroke();
+    ctx2.restore();
+  }
+
+  let time = 0;
+  function animateBg() {
+    ctx2.clearRect(0, 0, width, height);
+    time += 0.012;
+
+    for (let s of starsList) {
+      const flicker = s.alphaBase * (0.5 + 0.5 * Math.sin(time * s.speed + s.phase));
+      ctx2.save();
+      ctx2.globalAlpha = Math.max(0.2, flicker);
+      ctx2.fillStyle = s.color;
+      ctx2.shadowBlur = s.r > 1 ? 5 : 2;
+      ctx2.shadowColor = "#e0a458";
+      ctx2.beginPath();
+      ctx2.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx2.fill();
+      ctx2.restore();
+    }
+
+    for (let cr of crescentShapes) {
+      cr.x += cr.dx;
+      cr.y += cr.dy;
+      if (cr.x < -70) cr.x = width + 50;
+      if (cr.x > width + 70) cr.x = -50;
+      if (cr.y < -70) cr.y = height + 50;
+      if (cr.y > height + 70) cr.y = -50;
+      drawCrescentMoon(cr.x, cr.y, cr.size, cr.alpha);
+    }
+
+    if (Math.random() < 0.003 && shootingStarsList.length < 2) {
+      shootingStarsList.push({
+        x: Math.random() * width * 0.7,
+        y: Math.random() * height * 0.4,
+        len: 100 + Math.random() * 100,
+        speed: 7 + Math.random() * 8,
+        alphaVal: 0.9,
+        angle: Math.PI / 3.5 + (Math.random() - 0.5) * 0.5
+      });
+    }
+
+    for (let i=shootingStarsList.length-1; i>=0; i--) {
+      let ss = shootingStarsList[i];
+      ctx2.save();
+      ctx2.globalAlpha = ss.alphaVal;
+      const grad = ctx2.createLinearGradient(ss.x, ss.y, ss.x - Math.cos(ss.angle)*ss.len, ss.y - Math.sin(ss.angle)*ss.len);
+      grad.addColorStop(0, '#f7d48b');
+      grad.addColorStop(1, 'rgba(224,164,88,0)');
+      ctx2.strokeStyle = grad;
+      ctx2.lineWidth = 1.8;
+      ctx2.beginPath();
+      ctx2.moveTo(ss.x, ss.y);
+      ctx2.lineTo(ss.x - Math.cos(ss.angle)*ss.len, ss.y - Math.sin(ss.angle)*ss.len);
+      ctx2.stroke();
+      ctx2.restore();
+      ss.x += Math.cos(ss.angle) * ss.speed;
+      ss.y += Math.sin(ss.angle) * ss.speed;
+      ss.alphaVal -= 0.022;
+      if (ss.alphaVal <= 0) shootingStarsList.splice(i,1);
+    }
+    requestAnimationFrame(animateBg);
+  }
+
+  window.addEventListener('resize', () => {
+    resizeCanvas();
+    initStarsBg();
+    initCrescentsBg();
+  });
+  resizeCanvas();
+  initStarsBg();
+  initCrescentsBg();
+  animateBg();
+
+  // sparkles
+  function createSparkles() {
+    for (let i=0; i<44; i++) {
+      let sp = document.createElement('div');
+      sp.classList.add('sparkle');
+      sp.style.left = Math.random() * 100 + 'vw';
+      sp.style.top = Math.random() * 100 + 'vh';
+      sp.style.animationDelay = Math.random() * 6 + 's';
+      sp.style.animationDuration = 2 + Math.random() * 4 + 's';
+      sp.style.width = sp.style.height = 2 + Math.random() * 5 + 'px';
+      sp.style.background = Math.random() > 0.6 ? '#e0a458' : '#2c8c8c';
+      document.body.appendChild(sp);
+    }
+  }
+  createSparkles();
+</script>
+</body>
+</html>
